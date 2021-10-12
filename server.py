@@ -30,14 +30,16 @@ def is_alive():
 
 async def deploy(contract_definition: ContractDefinition, contract_address: str):
     starknet = await starknet_wrapper.get_starknet()
-    address = await starknet.deploy(contract_definition=contract_definition, contract_address=contract_address)
-    address2contract[address] = StarknetContract(
-        starknet=starknet,
-        abi=contract_definition.abi,
-        contract_address=address
-    )
-
+    contract = await starknet.deploy(contract_def=contract_definition, contract_address=contract_address)
+    address2contract[contract.contract_address] = contract
     return {}
+
+def attempt_hex(x):
+    try:
+        return hex(x)
+    except:
+        pass
+    return x
 
 async def call_or_invoke(choice, contract_address: str, entry_point_selector: int, calldata: list):
     if (contract_address not in address2contract):
@@ -56,7 +58,7 @@ async def call_or_invoke(choice, contract_address: str, entry_point_selector: in
     called = getattr(prepared, choice)
     result = await called()
 
-    return { "result": result }
+    return { "result": [attempt_hex(r) for r in result] }
 
 def is_transaction_id_legal(transaction_id: int) -> bool:
     return 0 <= transaction_id < len(transactions)
