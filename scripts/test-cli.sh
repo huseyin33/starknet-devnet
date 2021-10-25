@@ -23,20 +23,6 @@ if [ -z "$ABI_PATH" ]; then
     exit 2
 fi
 
-## DEBUG START
-which pip
-pip --version
-which python
-python --version
-which pip3
-pip3 --version
-which python3
-python3 --version
-echo pip freeze
-pip freeze
-echo pip3 freeze
-pip3 freeze
-## DEBUG END
 output=$(starknet deploy --contract $CONTRACT_PATH --gateway_url=$GATEWAY_URL)
 deploy_tx_id=$(echo $output | sed -r "s/.*Transaction ID: (\w*).*/\1/")
 address=$(echo $output | sed -r "s/.*Contract address: (\w*).*/\1/")
