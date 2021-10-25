@@ -16,10 +16,9 @@ jobs:
       image: ubuntu-2004:202107-02
     steps:
       - checkout
-      - run: export PYTHONPATH=$(which python3)
       - run:
-          name: Install poetry
-          command: pip3 install poetry
+          name: Install cairo-lang and poetry
+          command: pip3 install poetry cairo-lang
       - run:
           name: Install dependencies
           command: poetry install
