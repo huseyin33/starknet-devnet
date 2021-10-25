@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run:
           name: Install cairo-lang and poetry
-          command: pip3 install poetry cairo-lang
+          command: pip3 install poetry && poetry env use $(which python3)
       - run:
           name: Install dependencies
           command: poetry install
