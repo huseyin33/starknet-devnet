@@ -16,9 +16,7 @@ jobs:
       image: ubuntu-2004:202107-02
     steps:
       - checkout
-      - run:
-          name: Init venv
-          command: python3 -m venv my_venv && source my_venv/bin/activate
+      - run: export PYTHONPATH=$(which python3)
       - run:
           name: Install poetry
           command: pip3 install poetry
