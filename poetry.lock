@@ -90,7 +90,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "cairo-lang"
-version = "0.4.2"
+version = "0.5.1"
 description = "Compiler and runner for the Cairo language"
 category = "main"
 optional = false
@@ -103,7 +103,7 @@ ecdsa = "*"
 eth-hash = {version = "0.2.0", extras = ["pycryptodome"]}
 fastecdsa = "*"
 frozendict = "1.2"
-lark-parser = "0.8.5"
+lark-parser = "*"
 marshmallow = ">=3.2.1"
 marshmallow-dataclass = ">=7.1.0"
 marshmallow-enum = "*"
@@ -481,11 +481,16 @@ format_nongpl = ["idna", "jsonpointer (>1.13)", "webcolors", "rfc3986-validator 
 
 [[package]]
 name = "lark-parser"
-version = "0.8.5"
+version = "0.12.0"
 description = "a modern parsing library"
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.extras]
+atomic_cache = ["atomicwrites"]
+nearley = ["js2py"]
+regex = ["regex"]
 
 [[package]]
 name = "lru-dict"
@@ -985,7 +990,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "88429df309bf650a1ce501c6e98a140fa8650716270b8ff53c50cf6bf0086f25"
+content-hash = "2ed90dd18d792765ea3e067d3b7cf24ebedac11fd71f03840c856f850542cb4e"
 
 [metadata.files]
 aiohttp = [
@@ -1055,7 +1060,7 @@ cachetools = [
     {file = "cachetools-4.2.4.tar.gz", hash = "sha256:89ea6f1b638d5a73a4f9226be57ac5e4f399d22770b92355f92dcb0f7f001693"},
 ]
 cairo-lang = [
-    {file = "cairo-lang-0.4.2.zip", hash = "sha256:7cdbfe1c23545dc2d0d7d5f97e4d3a02cce8a50881ca9c8796a6df44a945de12"},
+    {file = "cairo-lang-0.5.1.zip", hash = "sha256:b03b7e7479126c17c1537584bce52bdc776ad2a8618b00894f17f4dd26bc2a27"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
@@ -1183,8 +1188,8 @@ jsonschema = [
     {file = "jsonschema-3.2.0.tar.gz", hash = "sha256:c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"},
 ]
 lark-parser = [
-    {file = "lark-parser-0.8.5.tar.gz", hash = "sha256:e3ee17708e310de3a832a9beb448aa60ab6812f1bb283f72d473584c7566cc74"},
-    {file = "lark_parser-0.8.5-py2.py3-none-any.whl", hash = "sha256:157879e04628e8e2bd57b72f3ba5642b3919137d5f7058612e95a38fb8761fa7"},
+    {file = "lark-parser-0.12.0.tar.gz", hash = "sha256:15967db1f1214013dca65b1180745047b9be457d73da224fcda3d9dd4e96a138"},
+    {file = "lark_parser-0.12.0-py2.py3-none-any.whl", hash = "sha256:0eaf30cb5ba787fe404d73a7d6e61df97b21d5a63ac26c5008c78a494373c675"},
 ]
 lru-dict = [
     {file = "lru-dict-1.1.7.tar.gz", hash = "sha256:45b81f67d75341d4433abade799a47e9c42a9e22a118531dcb5e549864032d7c"},
