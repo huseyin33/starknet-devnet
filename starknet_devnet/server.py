@@ -71,6 +71,7 @@ def adapt_calldata(calldata, expected_inputs):
             adapted_calldata.append(input_value)
             calldata_i += 1
         else:
+            parse_input_type() # TODO
             # probably never reached if `getattr(contract, method_name)` is called before
             abort(Response(f"Input type not supported:{input_type}.", 400))
 
@@ -116,6 +117,7 @@ async def add_transaction():
     tx_type = transaction.tx_type.name
     result_dict = {}
     if tx_type == "DEPLOY":
+        # TODO store all types from contract_definition and their sizes
         contract_address, result_dict = await deploy(
             transaction.contract_definition
         )
