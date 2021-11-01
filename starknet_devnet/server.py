@@ -29,11 +29,11 @@ starknet_wrapper = StarknetWrapper()
 def is_alive():
     return "Alive!!!"
 
-async def deploy(contract_definition: ContractDefinition, contract_address: str):
+async def deploy(contract_definition: ContractDefinition):
     starknet = await starknet_wrapper.get_starknet()
-    contract = await starknet.deploy(contract_def=contract_definition, contract_address=contract_address)
+    contract = await starknet.deploy(contract_def=contract_definition)
     address2contract[contract.contract_address] = contract
-    return {}
+    return contract.contract_address, {}
 
 def attempt_hex(x):
     try:
@@ -101,12 +101,12 @@ async def call_or_invoke(choice, contract_address: str, entry_point_selector: in
 
     prepared = method(*adapted_calldata)
     called = getattr(prepared, choice)
-    result = await called()
+    executed = await called()
 
-    return { "result": [attempt_hex(r) for r in result] }
+    return { "result": [attempt_hex(r) for r in executed.result] }
 
-def is_transaction_id_legal(transaction_id: int) -> bool:
-    return 0 <= transaction_id < len(transactions)
+def is_transaction_hash_legal(transaction_hash: int) -> bool:
+    return 0 <= transaction_hash < len(transactions)
 
 @app.route("/gateway/add_transaction", methods=["POST"])
 async def add_transaction():
@@ -116,11 +116,11 @@ async def add_transaction():
     tx_type = transaction.tx_type.name
     result_dict = {}
     if tx_type == "DEPLOY":
-        result_dict = await deploy(
-            transaction.contract_definition,
-            transaction.contract_address
+        contract_address, result_dict = await deploy(
+            transaction.contract_definition
         )
     elif tx_type == "INVOKE_FUNCTION":
+        contract_address = transaction.contract_address
         result_dict = await call_or_invoke("invoke",
             contract_address=transaction.contract_address,
             entry_point_selector=transaction.entry_point_selector,
@@ -129,23 +129,26 @@ async def add_transaction():
     else:
         abort(Response(f"Invalid tx_type: {tx_type}.", 400))
 
+    hex_address = hex(contract_address)
     new_id = len(transactions)
+    hex_new_id = hex(new_id)
     transaction = {
         "block_id": new_id,
         "block_number": new_id,
         "status": TxStatus.PENDING.name,
         "transaction": {
-            "contract_address": hex(transaction.contract_address),
+            "contract_address": hex_address,
             "type": tx_type
         },
-        "transaction_id": new_id,
+        "transaction_hash": hex_new_id,
         "transaction_index": 0 # always the first (and only) tx in the block
     }
     transactions.append(transaction)
 
     return jsonify({
         "code": StarkErrorCode.TRANSACTION_RECEIVED.name,
-        "tx_id": new_id,
+        "transaction_hash": hex_new_id,
+        "address": hex_address,
         **result_dict
     })
 
@@ -193,10 +196,10 @@ def get_storage_at():
 
 @app.route("/feeder_gateway/get_transaction_status", methods=["GET"])
 def get_transaction_status():
-    transaction_id = request.args.get("transactionId", type=int)
+    transaction_hash = request.args.get("transactionHash", type=lambda x: int(x, 16))
     tx_status = (
         TxStatus.PENDING.name
-        if is_transaction_id_legal(transaction_id)
+        if is_transaction_hash_legal(transaction_hash)
         else TxStatus.NOT_RECEIVED.name
     )
     return jsonify({
@@ -205,13 +208,13 @@ def get_transaction_status():
 
 @app.route("/feeder_gateway/get_transaction", methods=["GET"])
 def get_transaction():
-    transaction_id = request.args.get("transactionId", type=int)
-    if 0 <= transaction_id < len(transactions):
-        return jsonify(transactions[transaction_id])
+    transaction_hash = request.args.get("transactionHash", type=lambda x: int(x, 16))
+    if is_transaction_hash_legal(transaction_hash):
+        return jsonify(transactions[transaction_hash])
     else:
         return jsonify({
             "status": TxStatus.NOT_RECEIVED.name,
-            "transaction_id": transaction_id
+            "transaction_hash": transaction_hash
         })
 
 def main():
