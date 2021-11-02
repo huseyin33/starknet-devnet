@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-git clone -b devnet --single-branch git@github.com:Shard-Labs/starknet-hardhat-example.git
+git clone git@github.com:Shard-Labs/starknet-hardhat-example.git
 cd starknet-hardhat-example
 npm ci
 
