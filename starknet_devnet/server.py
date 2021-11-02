@@ -11,6 +11,7 @@ from .util import TxStatus, parse_args
 app = Flask(__name__)
 address2contract = {}
 address2types = {}
+hash2transaction = {}
 transactions = []
 
 class StarknetWrapper:
@@ -143,16 +144,15 @@ async def call_or_invoke(choice, contract_address: str, entry_point_selector: in
     return { "result": adapted_output }
 
 def is_transaction_hash_legal(transaction_hash: int) -> bool:
-    return 0 <= transaction_hash < len(transactions)
+    return transaction_hash in hash2transaction
 
 def store_types(contract_address: str, abi):
     structs = [x for x in abi if x["type"] == "struct"]
     type_dict = { struct["name"]: struct for struct in structs }
     address2types[contract_address] = type_dict
 
-def store_transaction(contract_address: str, tx_type: str) -> str:
+def store_transaction(contract_address: str, tx_type: str, transaction_hash: str) -> str:
     new_id = len(transactions)
-    hex_new_id = hex(new_id)
     transaction = {
         "block_id": new_id,
         "block_number": new_id,
@@ -161,17 +161,17 @@ def store_transaction(contract_address: str, tx_type: str) -> str:
             "contract_address": contract_address,
             "type": tx_type
         },
-        "transaction_hash": hex_new_id,
+        "transaction_hash": transaction_hash,
         "transaction_index": 0 # always the first (and only) tx in the block
     }
     transactions.append(transaction)
-    return hex_new_id
+    hash2transaction[transaction_hash] = transaction
 
 @app.route("/gateway/add_transaction", methods=["POST"])
 async def add_transaction():
     raw_data = request.get_data()
     transaction = Transaction.loads(raw_data)
-    # TODO transaction.calculate_hash()
+    transaction_hash = transaction.calculate_hash()
 
     tx_type = transaction.tx_type.name
     result_dict = {}
@@ -190,7 +190,7 @@ async def add_transaction():
     else:
         abort(Response(f"Invalid tx_type: {tx_type}.", 400))
 
-    transaction_hash = store_transaction(contract_address, tx_type)
+    store_transaction(contract_address, tx_type, transaction_hash)
 
     return jsonify({
         "code": StarkErrorCode.TRANSACTION_RECEIVED.name,
