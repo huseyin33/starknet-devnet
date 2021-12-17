@@ -18,7 +18,7 @@ docker build -t "$IMAGE:$LOCAL_VERSION" -t "$IMAGE:latest" .
 
 echo "Run a devnet instance in background; sleep to allow it to start"
 # can't use "localhost" because docker doesn't allow such mapping
-docker run -d -p 127.0.0.1:5000:5000 "$IMAGE:latest"
+docker run -d -p 5000:5000 "$IMAGE:latest"
 sleep 3
 docker ps
 
