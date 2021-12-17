@@ -6,9 +6,7 @@ aliases:
     filters:
       branches:
         only:
-          - master
-    requires:
-      - test
+          - docker-ci
 
 jobs:
   test:
@@ -55,8 +53,5 @@ workflows:
   version: 2
   test_and_publish:
     jobs:
-      - test
-      - package_build_and_publish:
-          <<: *on_master_after_test
       - image_build_and_push:
           <<: *on_master_after_test

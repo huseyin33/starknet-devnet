@@ -20,6 +20,7 @@ echo "Run a devnet instance in background; sleep to allow it to start"
 # can't use "localhost" because docker doesn't allow such mapping
 docker run -d -p 127.0.0.1:5000:5000 "$IMAGE:latest"
 sleep 3
+docker ps
 
 echo "Checking if devnet instance is alive"
 curl localhost:5000/is_alive
