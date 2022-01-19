@@ -10,7 +10,8 @@ npm link
 cd ..
 
 echo "Cloning starknet-hardhat-example branch 'devnet'"
-git clone -b devnet --single-branch git@github.com:Shard-Labs/starknet-hardhat-example.git
+# TODO switch to using branch devnet (this is just temporary)
+git clone -b devnet-venv --single-branch git@github.com:Shard-Labs/starknet-hardhat-example.git
 cd starknet-hardhat-example
 npm ci
 npm link @shardlabs/starknet-hardhat-plugin
