@@ -11,5 +11,7 @@ poetry install
 
 echo "Path after install:"
 echo "$PATH"
+echo "Flask version:"
+flask --version
 echo "Starknet version:"
 starknet --version 
