@@ -17,6 +17,8 @@ EVENTS_CONTRACT_PATH = f"{ARTIFACTS_PATH}/events.cairo/events.json"
 EVENTS_ABI_PATH = f"{ARTIFACTS_PATH}/events.cairo/events_abi.json"
 FAILING_CONTRACT_PATH = f"{ARTIFACTS_PATH}/always_fail.cairo/always_fail.json"
 
+EXPECTED_SALTY_DEPLOY_ADDRESS="0x07ef082652cf5e336e98971981f2ef9a32d5673c822898c344b213f51449cb1a"
+
 run_devnet_in_background(sleep_seconds=1)
 deploy_info = deploy(CONTRACT_PATH, ["0"])
 print("Deployment:", deploy_info)
@@ -64,19 +66,17 @@ value = call(
 )
 assert_equal(value, "40 60", "Checking complex input failed!")
 
-expected_salty_deploy_address="0x07ef082652cf5e336e98971981f2ef9a32d5673c822898c344b213f51449cb1a"
-
 assert_salty_deploy(
     contract_path=EVENTS_CONTRACT_PATH,
     inputs=["0"],
     salt="0x99",
-    expected_address=expected_salty_deploy_address,
+    expected_address=EXPECTED_SALTY_DEPLOY_ADDRESS,
     expected_tx_hash="0x073a803440143419cbabaf7484c6654dfb0deb4b0f6861190cb6c10c77a959bf"
 )
 
 salty_invoke_tx_hash = invoke(
     function="increase_balance",
-    address=expected_salty_deploy_address,
+    address=EXPECTED_SALTY_DEPLOY_ADDRESS,
     abi_path=EVENTS_ABI_PATH,
     inputs=["10"]
 )
