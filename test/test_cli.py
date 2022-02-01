@@ -71,7 +71,7 @@ assert_salty_deploy(
     salt="0x99",
     inputs=None,
     expected_address=EXPECTED_SALTY_DEPLOY_ADDRESS,
-    expected_tx_hash="0x073a803440143419cbabaf7484c6654dfb0deb4b0f6861190cb6c10c77a959bf"
+    expected_tx_hash="0x03e3c1a20f6b175b812bb14df175fb8a9e352ea7b38d7b942489968a8a4a9dd0"
 )
 
 salty_invoke_tx_hash = invoke(
@@ -81,6 +81,6 @@ salty_invoke_tx_hash = invoke(
     inputs=["10"]
 )
 
-assert_events(salty_invoke_tx_hash,"test/expected/invoke_receipt_event")
+assert_events(salty_invoke_tx_hash,"test/expected/invoke_receipt_event.json")
 
 assert_failing_deploy(contract_path=FAILING_CONTRACT_PATH)
