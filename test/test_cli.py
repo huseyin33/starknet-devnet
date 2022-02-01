@@ -66,6 +66,7 @@ value = call(
 )
 assert_equal(value, "40 60", "Checking complex input failed!")
 
+# check deploy when a salt is provided, and use the same contract to test events
 assert_salty_deploy(
     contract_path=EVENTS_CONTRACT_PATH,
     salt="0x99",
