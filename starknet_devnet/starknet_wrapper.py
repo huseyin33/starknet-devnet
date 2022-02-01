@@ -165,11 +165,16 @@ class StarknetWrapper:
     async def call(self, transaction: InvokeFunction):
         """Perform call according to specifications in `transaction`."""
         contract_wrapper = self.__get_contract_wrapper(transaction.contract_address)
+
+        signature_list = []
+        if hasattr(transaction, 'signature'):
+            signature_list = transaction.signature
+
         adapted_result, _ = await contract_wrapper.call_or_invoke(
             Choice.CALL,
             entry_point_selector=transaction.entry_point_selector,
             calldata=transaction.calldata,
-            signature=transaction.signature
+            signature=signature_list
         )
 
         return { "result": adapted_result }
