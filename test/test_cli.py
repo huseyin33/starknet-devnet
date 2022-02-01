@@ -68,7 +68,6 @@ assert_equal(value, "40 60", "Checking complex input failed!")
 
 assert_salty_deploy(
     contract_path=EVENTS_CONTRACT_PATH,
-    inputs=["0"],
     salt="0x99",
     expected_address=EXPECTED_SALTY_DEPLOY_ADDRESS,
     expected_tx_hash="0x073a803440143419cbabaf7484c6654dfb0deb4b0f6861190cb6c10c77a959bf"
