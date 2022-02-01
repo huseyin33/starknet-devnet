@@ -160,7 +160,7 @@ def assert_receipt(tx_hash, expected_path):
 
     assert_equal(receipt["transaction_hash"], tx_hash)
 
-    for ignorable_key in ["block_hash", "transaction_hash", "events"]:
+    for ignorable_key in ["block_hash", "transaction_hash"]:
         receipt.pop(ignorable_key)
         expected_receipt.pop(ignorable_key)
     assert_equal(receipt, expected_receipt)
