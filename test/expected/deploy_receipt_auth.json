@@ -1,6 +1,7 @@
 {
     "block_hash": "0x0",
     "block_number": 0,
+    "events": [],
     "execution_resources": {
         "builtin_instance_counter": {
             "bitwise_builtin": 0,
