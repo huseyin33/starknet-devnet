@@ -160,10 +160,20 @@ def assert_receipt(tx_hash, expected_path):
 
     assert_equal(receipt["transaction_hash"], tx_hash)
 
-    for ignorable_key in ["block_hash", "transaction_hash"]:
+    for ignorable_key in ["block_hash", "transaction_hash", "events"]:
         receipt.pop(ignorable_key)
         expected_receipt.pop(ignorable_key)
     assert_equal(receipt, expected_receipt)
+
+def assert_events(tx_hash, expected_path):
+    """Asserts the content of the events element of the receipt of tx with tx_hash."""
+    output = my_run([
+        "starknet", "get_transaction_receipt",
+        "--hash", tx_hash
+    ])
+    receipt = json.loads(output.stdout)
+    expected_receipt = load_json_from_path(expected_path)
+    assert_equal(receipt["events"], expected_receipt["events"])
 
 def get_block(block_number=None, parse=False):
     """Get the block with block_number. If no number provided, return the last."""

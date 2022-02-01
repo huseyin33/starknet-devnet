@@ -6,13 +6,15 @@ from .util import (
     assert_negative_block_input,
     run_devnet_in_background,
     assert_block, assert_contract_code, assert_equal, assert_failing_deploy, assert_receipt, assert_salty_deploy,
-    assert_storage, assert_transaction, assert_tx_status,
+    assert_storage, assert_transaction, assert_tx_status, assert_events,
     call, deploy, invoke
 )
 
 ARTIFACTS_PATH = "starknet-hardhat-example/starknet-artifacts/contracts"
 CONTRACT_PATH = f"{ARTIFACTS_PATH}/contract.cairo/contract.json"
 ABI_PATH = f"{ARTIFACTS_PATH}/contract.cairo/contract_abi.json"
+EVENTS_CONTRACT_PATH = f"{ARTIFACTS_PATH}/events.cairo/events.json"
+EVENTS_ABI_PATH = f"{ARTIFACTS_PATH}/events.cairo/events_abi.json"
 FAILING_CONTRACT_PATH = f"{ARTIFACTS_PATH}/always_fail.cairo/always_fail.json"
 
 run_devnet_in_background(sleep_seconds=1)
@@ -62,12 +64,23 @@ value = call(
 )
 assert_equal(value, "40 60", "Checking complex input failed!")
 
+expected_salty_deploy_address="0x07ef082652cf5e336e98971981f2ef9a32d5673c822898c344b213f51449cb1a"
+
 assert_salty_deploy(
-    contract_path=CONTRACT_PATH,
+    contract_path=EVENTS_CONTRACT_PATH,
     inputs=["0"],
     salt="0x99",
-    expected_address="0x0116c1e1281f88c68d7ef61dc7b49bd1d7c4a3dcbe821b1c868735fd712947f0",
+    expected_address=expected_salty_deploy_address,
     expected_tx_hash="0x073a803440143419cbabaf7484c6654dfb0deb4b0f6861190cb6c10c77a959bf"
 )
+
+salty_invoke_tx_hash = invoke(
+    function="increase_balance",
+    address=expected_salty_deploy_address,
+    abi_path=EVENTS_ABI_PATH,
+    inputs=["10"]
+)
+
+assert_events(salty_invoke_tx_hash,"test/expected/invoke_receipt_event")
 
 assert_failing_deploy(contract_path=FAILING_CONTRACT_PATH)
