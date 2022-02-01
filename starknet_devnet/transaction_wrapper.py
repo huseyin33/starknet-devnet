@@ -49,7 +49,7 @@ class TransactionWrapper(ABC):
 
         events = []
 
-        if execution_info.raw_events is not None:
+        if hasattr(execution_info, 'raw_events'):
             events = execution_info.raw_events
 
         self.transaction = {

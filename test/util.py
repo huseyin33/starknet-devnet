@@ -51,7 +51,6 @@ def my_run(args, raise_on_nonzero=True, add_gateway_urls=True):
             "--gateway_url", GATEWAY_URL,
             "--feeder_gateway_url", FEEDER_GATEWAY_URL
         ])
-    print(my_args)
     output = subprocess.run(my_args, encoding="utf-8", check=False, capture_output=True)
     if output.returncode != 0 and raise_on_nonzero:
         if output.stderr:
