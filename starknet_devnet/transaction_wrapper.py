@@ -5,13 +5,14 @@ Contains code for wrapping transactions.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
-from starkware.starknet.business_logic.internal_transaction import InternalDeploy, InternalInvokeFunction
 
+from starkware.starknet.business_logic.internal_transaction import InternalDeploy, InternalInvokeFunction
 from starkware.starknet.definitions.error_codes import StarknetErrorCode
 from starkware.starknet.definitions.transaction_type import TransactionType
 from starkware.starknet.testing.objects import StarknetTransactionExecutionInfo
 
 from .util import TxStatus, fixed_length_hex
+from .constants import FAILURE_REASON_KEY
 
 @dataclass
 class TransactionDetails(ABC):
@@ -77,8 +78,8 @@ class TransactionWrapper(ABC):
         assert error_message
         assert self.transaction
         assert self.receipt
-        failure_key = "transaction_failure_reason"
-        self.transaction[failure_key] = self.receipt[failure_key] = {
+
+        self.transaction[FAILURE_REASON_KEY] = self.receipt[FAILURE_REASON_KEY] = {
             "code": StarknetErrorCode.TRANSACTION_FAILED.name,
             "error_message": error_message,
             "tx_id": self.transaction_hash

@@ -3,6 +3,7 @@ A server exposing Starknet functionalities as API endpoints.
 """
 
 import os
+import json
 
 from flask import Flask, request, jsonify, abort
 from flask.wrappers import Response
@@ -32,9 +33,13 @@ def is_alive():
 async def add_transaction():
     """Endpoint for accepting DEPLOY and INVOKE_FUNCTION transactions."""
 
-    raw_data = request.get_data()
+    request_dict = json.loads(request.data.decode("utf-8"))
+
+    if "signature" not in request_dict and request_dict["type"] == TransactionType.INVOKE_FUNCTION.name:
+        request_dict["signature"] = []
+
     try:
-        transaction = Transaction.loads(raw_data)
+        transaction = Transaction.load(request_dict)
     except (TypeError, ValidationError):
         msg = f"Invalid tx. Be sure to use the correct compilation (json) artifact. Devnet-compatible cairo-lang version: {CAIRO_LANG_VERSION}"
         abort(Response(msg, 400))
@@ -67,9 +72,13 @@ async def call_contract():
     Endpoint for receiving calls (not invokes) of contract functions.
     """
 
-    raw_data = request.get_data()
+    request_dict = json.loads(request.data.decode("utf-8"))
+
+    if "signature" not in request_dict:
+        request_dict["signature"] = []
+
     try:
-        call_specifications = InvokeFunction.loads(raw_data)
+        call_specifications = InvokeFunction.load(request_dict)
         result_dict = await starknet_wrapper.call(call_specifications)
     except StarkException as err:
         # code 400 would make more sense, but alpha returns 500
