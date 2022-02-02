@@ -77,7 +77,7 @@ class TransactionWrapper(ABC):
         assert error_message
         assert self.transaction
         assert self.receipt
-        failure_key = "tx_failure_reason"
+        failure_key = "transaction_failure_reason"
         self.transaction[failure_key] = self.receipt[failure_key] = {
             "code": StarknetErrorCode.TRANSACTION_FAILED.name,
             "error_message": error_message,

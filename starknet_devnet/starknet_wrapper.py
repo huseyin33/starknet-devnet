@@ -198,9 +198,10 @@ class StarknetWrapper:
             if "block_hash" in transaction:
                 ret["block_hash"] = transaction["block_hash"]
 
-            failure_key = "tx_failure_reason"
-            if failure_key in transaction:
-                ret[failure_key] = transaction[failure_key]
+            curr_failure_key = "transaction_failure_reason"
+            new_failure_key = "tx_failure_reason"
+            if curr_failure_key in transaction:
+                ret[new_failure_key] = transaction[curr_failure_key]
 
             return ret
 
