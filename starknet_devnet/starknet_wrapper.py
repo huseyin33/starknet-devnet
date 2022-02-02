@@ -184,13 +184,19 @@ class StarknetWrapper:
             transaction_wrapper = self.__transaction_wrappers[tx_hash_int]
             transaction = transaction_wrapper.transaction
 
+            # the transaction status object only needs 1-3 elements from the transaction_wrapper object
             ret = {
+                # "tx_status" always exists
                 "tx_status": transaction["status"]
             }
 
+            # "block_hash" will only exist after transaction enters ACCEPTED_ON_L2
             if "block_hash" in transaction:
                 ret["block_hash"] = transaction["block_hash"]
 
+            # "tx_failure_reason" will only exist if the transaction was rejected.
+            # the key in the transaction_wrapper object is "transaction_failure_reason"
+            # first it must be checked if the object contains an element with that key
             if FAILURE_REASON_KEY in transaction:
                 ret["tx_failure_reason"] = transaction[FAILURE_REASON_KEY]
 
