@@ -13,7 +13,7 @@ aliases:
 jobs:
   test:
     docker:
-      - image: cimg/python:3.7.12-node
+      - image: cimg/python:3.7.12
     resource_class: medium
     parallelism: 2
     steps:
@@ -41,7 +41,7 @@ jobs:
           path: test-results
   package_build_and_publish:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.7.12
     resource_class: medium
     steps:
       - checkout
