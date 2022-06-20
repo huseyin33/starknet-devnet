@@ -368,7 +368,25 @@ const account = await starknet.getAccountFromAddress(
 );
 ```
 
-The balance of an account can be checked using:
+### Predeployed accounts can be checked using:
+
+```
+GET /get_predeployed_accounts
+```
+
+Response:
+
+```
+[{
+"initial_balance": 1e+21,
+"address": "0x7c3e2...",
+"private_key": "0x6160...",
+"public_key": "0x6a5540..."
+},
+...]
+```
+
+### The balance of an account can be checked using:
 
 ```
 GET /account_balance?address=<HEX_ADDRESS>
