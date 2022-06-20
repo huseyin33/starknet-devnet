@@ -2,7 +2,6 @@
 
 set -e
 
-echo "pyenv: $(pyenv --version)"
 echo "npm: $(npm --version)"
 echo "pip: $(pip --version)"
 echo "pip3: $(pip3 --version)"

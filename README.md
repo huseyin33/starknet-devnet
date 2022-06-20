@@ -239,6 +239,12 @@ starknet-devnet --dump-on transaction --dump-path <PATH>
 curl -X POST http://<HOST>:<PORT>/dump -d '{ "path": <PATH> }' -H "Content-Type: application/json"
 ```
 
+- Loading state on request `/load`:
+
+```
+curl -X POST http://<HOST>:<PORT>/load -d '{ "path": <PATH> }' -H "Content-Type: application/json"
+```
+
 ### Loading
 
 To load a preserved Devnet instance, run:
@@ -429,6 +435,12 @@ If you're a developer willing to contribute, be sure to have installed [Poetry](
 poetry run starknet-devnet
 ```
 
+### Development - Run in debug mode
+
+```text
+./scripts/starknet-devnet-debug.sh 
+```
+
 ### Development - Lint
 
 ```text
@@ -443,6 +455,8 @@ When running tests locally, do it from the project root:
 ./scripts/compile_contracts.sh # first generate the artifacts
 
 poetry run pytest test/
+
+poetry run pytest -s -v test/ # for more verbose output
 
 poetry run pytest test/<TEST_FILE> # for a single file
 
