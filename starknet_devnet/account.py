@@ -19,7 +19,7 @@ class Account:
     """Account contract wrapper."""
 
     CONTRACT_CLASS: ContractClass = None # loaded lazily
-    CONTRACT_PATH = "accounts_artifacts/OpenZeppelin/0.1.0/Account.cairo/Account"
+    CONTRACT_PATH = "accounts_artifacts/OpenZeppelin/b27101eb826fae73f49751fa384c2a0ff3377af2/Account.cairo/Account"
 
     # Precalculated to save time
     # HASH = compute_class_hash(contract_class=Account.get_contract_class()))
