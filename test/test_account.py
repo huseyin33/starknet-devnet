@@ -78,6 +78,7 @@ def test_account_contract_deploy():
 def test_invoke_and_another_contract():
     """Test invoking another contract."""
     deploy_info = deploy_empty_contract()
+    deploy_account_contract(salt=SALT)
     to_address = int(deploy_info["address"], 16)
 
     # execute increase_balance call
