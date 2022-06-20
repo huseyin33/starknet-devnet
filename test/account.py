@@ -2,17 +2,23 @@
 Account test functions and utilities.
 """
 
+from typing import List, Sequence, Tuple
 
-from starkware.cairo.common.hash_state import compute_hash_on_elements
 from starkware.crypto.signature.signature import private_to_stark_key, sign
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.definitions.constants import TRANSACTION_VERSION, QUERY_VERSION
+from starkware.crypto.signature.signature import private_to_stark_key, sign
+from starkware.starknet.core.os.transaction_hash.transaction_hash import (
+    calculate_transaction_hash_common,
+    TransactionHashPrefix
+)
+from starkware.starknet.definitions.general_config import StarknetChainId
 
 from .util import deploy, call, invoke, estimate_fee
 
 ACCOUNT_ARTIFACTS_PATH = "starknet_devnet/accounts_artifacts"
 ACCOUNT_AUTHOR = "OpenZeppelin"
-ACCOUNT_VERSION = "0.1.0"
+ACCOUNT_VERSION = "b27101eb826fae73f49751fa384c2a0ff3377af2"
 
 ACCOUNT_PATH = f"{ACCOUNT_ARTIFACTS_PATH}/{ACCOUNT_AUTHOR}/{ACCOUNT_VERSION}/Account.cairo/Account.json"
 ACCOUNT_ABI_PATH = f"{ACCOUNT_ARTIFACTS_PATH}/{ACCOUNT_AUTHOR}/{ACCOUNT_VERSION}/Account.cairo/Account_abi.json"
@@ -38,29 +44,11 @@ def get_execute_calldata(call_array, calldata, nonce):
         int(nonce)
     ]
 
-def str_to_felt(text):
+def str_to_felt(text: str) -> int:
     """Converts string to felt."""
     return int.from_bytes(bytes(text, "ascii"), "big")
 
-def hash_multicall(sender, calls, nonce, max_fee, version):
-    """desc"""
-    hash_array = []
-
-    for call_tuple in calls:
-        call_elements = [call_tuple[0], call_tuple[1], compute_hash_on_elements(call_tuple[2])]
-        hash_array.append(compute_hash_on_elements(call_elements))
-
-    return compute_hash_on_elements([
-        str_to_felt('StarkNet Transaction'),
-        sender,
-        compute_hash_on_elements(hash_array),
-        nonce,
-        max_fee,
-        version
-    ])
-
-
-def get_signature(message_hash, private_key):
+def get_signature(message_hash: int, private_key: int) -> Tuple[str, str]:
     """Get signature from message hash and private key."""
     sig_r, sig_s = sign(message_hash, private_key)
     return [str(sig_r), str(sig_s)]
@@ -84,34 +72,56 @@ def from_call_to_call_array(calls):
 
     return (call_array, calldata)
 
-def adapt_inputs(execute_calldata):
+def adapt_inputs(execute_calldata: List[int]) -> List[str]:
     """Get stringified inputs from execute_calldata."""
     return [str(v) for v in execute_calldata]
 
 # pylint: disable=too-many-arguments
-def get_execute_args(calls, account_address, private_key, nonce=None, max_fee=0, version=TRANSACTION_VERSION):
+def get_execute_args(
+    calls,
+    account_address,
+    private_key,
+    nonce=None,
+    max_fee=0,
+    version: int = TRANSACTION_VERSION):
     """Returns signature and execute calldata"""
 
     if nonce is None:
         nonce = get_nonce(account_address)
 
-    # get signature
-    calls_with_selector = [
-        (call[0], get_selector_from_name(call[1]), call[2]) for call in calls]
-    message_hash = hash_multicall(
-        sender=int(account_address, 16),
-        calls=calls_with_selector,
-        nonce=int(nonce),
-        max_fee=max_fee,
-        version=version
-    )
-    signature = get_signature(message_hash, private_key)
-
     # get execute calldata
     (call_array, calldata) = from_call_to_call_array(calls)
     execute_calldata = get_execute_calldata(call_array, calldata, nonce)
 
+    message_hash = get_transaction_hash(
+        contract_address=int(account_address, 16),
+        calldata=execute_calldata,
+        version=version,
+        max_fee=max_fee
+    )
+
+    signature = get_signature(message_hash, private_key)
+
+
     return signature, execute_calldata
+
+def get_transaction_hash(
+    contract_address: int,
+    calldata: Sequence[int],
+    version: int,
+    max_fee: int = 0
+) -> str:
+    """Get transaction hash for execute transaction."""
+    return calculate_transaction_hash_common(
+        tx_hash_prefix=TransactionHashPrefix.INVOKE,
+        version=version,
+        contract_address=contract_address,
+        entry_point_selector=get_selector_from_name("__execute__"),
+        calldata=calldata,
+        max_fee=max_fee,
+        chain_id=StarknetChainId.TESTNET.value,
+        additional_data=[],
+    )
 
 def get_estimated_fee(calls, account_address, private_key, nonce=None):
     """Get estimated fee through account."""
@@ -130,6 +140,7 @@ def get_estimated_fee(calls, account_address, private_key, nonce=None):
         abi_path=ACCOUNT_ABI_PATH,
         signature=signature,
     )
+
 
 def execute(calls, account_address, private_key, nonce=None, max_fee=0, query=False):
     """Invoke __execute__ with correct calldata and signature."""

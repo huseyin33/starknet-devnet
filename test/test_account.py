@@ -31,7 +31,7 @@ from .account import (
 
 INVOKE_CONTENT = load_file_content("invoke.json")
 DEPLOY_CONTENT = load_file_content("deploy.json")
-ACCOUNT_ADDRESS = "0x066a91d591d5ba09d37f21fd526242c1ddc6dc6b0ce72b2482a4c6c033114e3a"
+ACCOUNT_ADDRESS = "0x01c396f5ab967921c282c3a300c008fa84069dc72b543ba9405927a9944a0dde"
 INVALID_HASH = "0x58d4d4ed7580a7a98ab608883ec9fe722424ce52c19f2f369eeea301f535914"
 SALT = "0x99"
 
@@ -78,7 +78,7 @@ def test_account_contract_deploy():
 def test_invoke_and_another_contract():
     """Test invoking another contract."""
     deploy_info = deploy_empty_contract()
-    deploy_account_contract(salt=SALT)
+    print(deploy_account_contract(salt=SALT))
     to_address = int(deploy_info["address"], 16)
 
     # execute increase_balance call
