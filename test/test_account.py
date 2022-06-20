@@ -190,7 +190,7 @@ def test_sufficient_max_fee():
 def test_insufficient_balance():
     """Test handling of insufficient account balance"""
     deploy_info = deploy_empty_contract()
-    account_address = "0x981c460a0b96bf4439df5a320aa12d4177400190638693988a92cd2df896ed"
+    account_address = "0x347be35996a21f6bf0623e75dbce52baba918ad5ae8d83b6f416045ab22961a"
     private_key = 0xbdd640fb06671ad11c80317fa3b1799d
     to_address = int(deploy_info["address"], 16)
     initial_account_balance = get_account_balance(account_address)

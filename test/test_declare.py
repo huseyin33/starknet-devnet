@@ -50,7 +50,7 @@ def assert_deployed_through_syscall(tx_hash, initial_balance):
     )
     assert_equal(balance, initial_balance)
 
-PREDEPLOYED_ACCOUNT_ADDRESS = "0x981c460a0b96bf4439df5a320aa12d4177400190638693988a92cd2df896ed"
+PREDEPLOYED_ACCOUNT_ADDRESS = "0x347be35996a21f6bf0623e75dbce52baba918ad5ae8d83b6f416045ab22961a"
 PREDEPLOYED_ACCOUNT_PRIVATE_KEY = 0xbdd640fb06671ad11c80317fa3b1799d
 
 @pytest.mark.declare
