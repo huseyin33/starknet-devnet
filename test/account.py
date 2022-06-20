@@ -7,7 +7,6 @@ from typing import List, Sequence, Tuple
 from starkware.crypto.signature.signature import private_to_stark_key, sign
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.definitions.constants import TRANSACTION_VERSION, QUERY_VERSION
-from starkware.crypto.signature.signature import private_to_stark_key, sign
 from starkware.starknet.core.os.transaction_hash.transaction_hash import (
     calculate_transaction_hash_common,
     TransactionHashPrefix
@@ -93,15 +92,14 @@ def get_execute_args(
     (call_array, calldata) = from_call_to_call_array(calls)
     execute_calldata = get_execute_calldata(call_array, calldata, nonce)
 
+    # get signature
     message_hash = get_transaction_hash(
         contract_address=int(account_address, 16),
         calldata=execute_calldata,
         version=version,
         max_fee=max_fee
     )
-
     signature = get_signature(message_hash, private_key)
-
 
     return signature, execute_calldata
 
