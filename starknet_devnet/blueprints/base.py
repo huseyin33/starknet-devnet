@@ -90,9 +90,11 @@ async def get_balance():
     })
 
 @base.route("/get_predeployed_accounts", methods=["GET"])
-def get_predefined_accounts():
+def get_predeployed_accounts():
+    """Get predeployed accounts"""
+
     accounts = state.starknet_wrapper.accounts
     json_accounts = []
     for account in accounts:
-        json_accounts.append(account.toJSON())
+        json_accounts.append(account.to_json())
     return jsonify(json_accounts)
