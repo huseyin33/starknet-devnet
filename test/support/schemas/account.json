@@ -1,14 +1,26 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Account schema",
-    "type" : "object",
-    "properties" : {
-        "address" : {"type" : "string", "pattern": "^0x[a-fA-F0-9]+$"},
-        "initial_balance" : {"type" : "number"},
-        "private_key" : {"type" : "string", "pattern": "^0x[a-fA-F0-9]+$"},
-        "public_key" : {"type" : "string", "pattern": "^0x[a-fA-F0-9]+$"}
+    "type": "object",
+    "properties": {
+        "address": {
+            "$ref": "type/hexstring.json"
+        },
+        "initial_balance": {
+            "type": "number"
+        },
+        "private_key": {
+            "$ref": "type/hexstring.json"
+        },
+        "public_key": {
+            "$ref": "type/hexstring.json"
+        }
     },
-    "required": ["address", "initial_balance", "private_key", "public_key"],
+    "required": [
+        "address",
+        "initial_balance",
+        "private_key",
+        "public_key"
+    ],
     "additionalProperties": false
-    
 }

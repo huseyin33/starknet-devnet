@@ -1,0 +1,115 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Predeployed accounts fixed value response schema",
+    "type": "array",
+    "items": [
+        {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "enum": [
+                        "0xc7608a2ba18f3af1a7d95ac07b7772ca5d2e84c6191e1ccb99a74521b4eda4"
+                    ]
+                },
+                "initial_balance": {
+                    "type": "number",
+                    "enum": [
+                        1000
+                    ]
+                },
+                "private_key": {
+                    "type": "string",
+                    "enum": [
+                        "0xc4da537c1651ddae44867db30d67b366"
+                    ]
+                },
+                "public_key": {
+                    "type": "string",
+                    "enum": [
+                        "0x60dea6c1228f1db4ca1f9db11c01b6e9cce5e627f7181dcaa27d69cbdbe57b5"
+                    ]
+                }
+            },
+            "required": [
+                "address",
+                "initial_balance",
+                "private_key",
+                "public_key"
+            ],
+            "additionalProperties": false
+        },
+        {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "enum": [
+                        "0x5d13db75ca726e8b45484c7c5692493e41f883e20888baf6cfeb9444938ba89"
+                    ]
+                },
+                "initial_balance": {
+                    "type": "number",
+                    "enum": [
+                        1000
+                    ]
+                },
+                "private_key": {
+                    "type": "string",
+                    "enum": [
+                        "0xd6a82a951b923e0a443cdef36840ff07"
+                    ]
+                },
+                "public_key": {
+                    "type": "string",
+                    "enum": [
+                        "0x5a91f0ea25312accb20d8041b12260bff31a3490e5730a690b0ec8fe10ffbb"
+                    ]
+                }
+            },
+            "required": [
+                "address",
+                "initial_balance",
+                "private_key",
+                "public_key"
+            ],
+            "additionalProperties": false
+        },
+        {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "enum": [
+                        "0x14271050ae36fb1a217a5d9a0eb73b76ccaee633c5acc7008ceeace3c18694f"
+                    ]
+                },
+                "initial_balance": {
+                    "type": "number",
+                    "enum": [
+                        1000
+                    ]
+                },
+                "private_key": {
+                    "type": "string",
+                    "enum": [
+                        "0x610e4ad509c47055dff4948fe6b4f832"
+                    ]
+                },
+                "public_key": {
+                    "type": "string",
+                    "enum": [
+                        "0x2b45af00df833ea1a4895c49a18ebd84309b79d658cae05e274a7b1cac47016"
+                    ]
+                }
+            },
+            "required": [
+                "address",
+                "initial_balance",
+                "private_key",
+                "public_key"
+            ],
+            "additionalProperties": false
+        }
+    ]
+}
