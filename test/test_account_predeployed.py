@@ -31,15 +31,6 @@ def test_precomputed_contract_hash():
 
 
 @pytest.mark.account_predeployed
-@devnet_in_background()
-def test_predeployed_accounts_endpoint():
-    """Test if the endpoint return list of predeployed accounts"""
-    response = requests.get(f"{GATEWAY_URL}/predeployed_accounts")
-    assert response.status_code == 200
-    assert_valid_schema(response.json(), "predeployed_accounts.json")
-
-
-@pytest.mark.account_predeployed
 @devnet_in_background(*ACCOUNTS_SEED_DEVNET_ARGS)
 def test_predeployed_accounts_predefined_values():
     """Test if --account --seed --initial-balance return exact calculated values"""
