@@ -15,7 +15,7 @@ jobs:
   test-py-min: &test-template
     docker:
       - image: cimg/python:3.7.12-node
-    resource_class: medium
+    resource_class: large
     parallelism: 2
     steps:
       - checkout
@@ -37,7 +37,7 @@ jobs:
           command: |
             TESTFILES=$(
                 circleci tests glob test/test*.py |
-                circleci tests split --split-by=timings --timings-type=classname
+                circleci tests split --split-by=timings
             )
             mkdir -p test-results
             poetry run pytest -s --junitxml=test-results/junit.xml -vv $TESTFILES
@@ -52,7 +52,7 @@ jobs:
   package_build_and_publish:
     docker:
       - image: cimg/python:3.7.12
-    resource_class: medium
+    resource_class: large
     steps:
       - checkout
       - run: ./scripts/package_build_and_publish.sh
@@ -60,7 +60,7 @@ jobs:
   image_build_and_push:
     docker:
       - image: cimg/base:2021.04
-    resource_class: medium
+    resource_class: large
     steps:
       - checkout
       - setup_remote_docker:
